@@ -1,0 +1,28 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst lab62.buttons -pg 1 -lvl 3 -y 30
+preplace inst lab62.sdram_pll -pg 1 -lvl 3 -y 150
+preplace inst lab62.sdram -pg 1 -lvl 3 -y 230
+preplace inst lab62.onchip_memory2_0 -pg 1 -lvl 3 -y 330
+preplace inst lab62.nios2_gen2_0.reset_bridge -pg 1
+preplace inst lab62.nios2_gen2_0 -pg 1 -lvl 2 -y 340
+preplace inst lab62.sysid_qsys_0 -pg 1 -lvl 3 -y 510
+preplace inst lab62.clk_0 -pg 1 -lvl 1 -y 410
+preplace inst lab62.SW -pg 1 -lvl 3 -y 410
+preplace inst lab62.nios2_gen2_0.cpu -pg 1
+preplace inst lab62 -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst lab62.led -pg 1 -lvl 3 -y 590
+preplace inst lab62.nios2_gen2_0.clock_bridge -pg 1
+preplace netloc EXPORT<net_container>lab62</net_container>(SLAVE)led.external_connection,(SLAVE)lab62.led_wire) 1 0 3 NJ 620 NJ 620 NJ
+preplace netloc EXPORT<net_container>lab62</net_container>(SLAVE)sdram.wire,(SLAVE)lab62.sdram_wire) 1 0 3 NJ 300 NJ 300 NJ
+preplace netloc EXPORT<net_container>lab62</net_container>(SLAVE)clk_0.clk_in_reset,(SLAVE)lab62.reset) 1 0 1 NJ
+preplace netloc INTERCONNECT<net_container>lab62</net_container>(SLAVE)sdram.s1,(SLAVE)onchip_memory2_0.s1,(SLAVE)SW.s1,(MASTER)nios2_gen2_0.data_master,(MASTER)nios2_gen2_0.instruction_master,(SLAVE)buttons.s1,(SLAVE)nios2_gen2_0.debug_mem_slave,(SLAVE)led.s1,(SLAVE)sysid_qsys_0.control_slave,(SLAVE)sdram_pll.pll_slave) 1 1 2 340 660 720
+preplace netloc EXPORT<net_container>lab62</net_container>(SLAVE)lab62.sw_wire,(SLAVE)SW.external_connection) 1 0 3 NJ 480 NJ 480 NJ
+preplace netloc EXPORT<net_container>lab62</net_container>(MASTER)lab62.sdram_clk,(MASTER)sdram_pll.c1) 1 3 1 N
+preplace netloc INTERCONNECT<net_container>lab62</net_container>(SLAVE)SW.reset,(SLAVE)nios2_gen2_0.reset,(SLAVE)onchip_memory2_0.reset1,(SLAVE)sysid_qsys_0.reset,(MASTER)clk_0.clk_reset,(SLAVE)sdram_pll.inclk_interface_reset,(SLAVE)led.reset,(SLAVE)buttons.reset,(SLAVE)sdram.reset,(MASTER)nios2_gen2_0.debug_reset_request) 1 1 2 320 640 740
+preplace netloc EXPORT<net_container>lab62</net_container>(SLAVE)lab62.buttons_wire,(SLAVE)buttons.external_connection) 1 0 3 NJ 60 NJ 60 NJ
+preplace netloc EXPORT<net_container>lab62</net_container>(SLAVE)lab62.clk,(SLAVE)clk_0.clk_in) 1 0 1 NJ
+preplace netloc FAN_OUT<net_container>lab62</net_container>(SLAVE)sdram_pll.inclk_interface,(MASTER)clk_0.clk,(SLAVE)onchip_memory2_0.clk1,(SLAVE)led.clk,(SLAVE)SW.clk,(SLAVE)nios2_gen2_0.clk,(SLAVE)sysid_qsys_0.clk,(SLAVE)buttons.clk) 1 1 2 300 500 760
+preplace netloc POINT_TO_POINT<net_container>lab62</net_container>(SLAVE)sdram.clk,(MASTER)sdram_pll.c0) 1 2 2 780 140 1020
+levelinfo -pg 1 0 90 1130
+levelinfo -hier lab62 100 130 460 830 1040

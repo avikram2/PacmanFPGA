@@ -1,0 +1,47 @@
+module check_wall(input [9:0] DrawX, DrawY, output logic wallEnable);
+
+always_comb
+begin
+wallEnable = 0;
+
+int wall_size = 56;
+
+
+if (DrawX < 8 || DrawX > 632 || DrawY < 8 || DrawY > 472) //outerboundary wall
+wallEnable = 1;
+
+
+if (DrawX >= 80 && DrawX < (80 + wall_size) && DrawY >= 80 && DrawY < (80+2*wall_size))
+wallEnable = 1;
+
+if (DrawX >= 480 && DrawX < (480 + 2*wall_size) && DrawY >= 240 && DrawY < (240 + wall_size))
+wallEnable = 1;
+end
+
+endmodule
+
+
+module sprite_wall (input [9:0] X, Y, X_motion, Y_motion, output stop_motion);
+
+    logic [9:0] posX, posY;
+    logic wall;
+    always_comb
+    begin
+
+        posX = X;
+        posY = Y;
+        if (X_motion == 1 && Y_motion == 0) //right
+            posX = (X + 9);
+        if (X_motion == -1)
+            posX = X-1;
+        if (Y_motion == 1)
+            posY = Y + 9;
+        if (Y_motion == -1)
+            posY = Y-1;
+    end
+
+    assign stop_motion = wall;
+
+    check_wall cw(.DrawX(posX), .DrawY(posY), .wallEnable(wall));
+
+endmodule
