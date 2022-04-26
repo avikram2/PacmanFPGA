@@ -1,4 +1,4 @@
-module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_redX, output [9:0] ghost_redY);
+module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_redX, output [9:0] ghost_redY);
 
 
     logic [9:0] ghostX, ghostY, ghostXmotion, ghostYmotion;
@@ -51,7 +51,7 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, input logic [9:0
 
 
 
-    always_ff @ (posedge Reset or posedge frame_clk)
+    always_ff @ (posedge Reset or posedge frame_clk or posedge isDefeated or posedge death)
     begin
         if (Reset)
             begin
@@ -62,10 +62,20 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, input logic [9:0
 
             end
 
+
+        else if (death)
+        begin
+
+            ghostXmotion <= 0;
+            ghostYmotion <= 0;
+        end
+
         else if (isDefeated == 1)
             begin
+                ghostX <= 72;
+                ghostY <= 40;
                 ghostXmotion <= 0;
-            ghostYmotion <= 0;
+                ghostYmotion <= 0;
 
             end
 
@@ -122,7 +132,7 @@ endmodule
 
 
 
-module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_greenX, output [9:0] ghost_greenY );
+module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_greenX, output [9:0] ghost_greenY );
 
     logic [9:0] ghostX, ghostY, ghostXmotion, ghostYmotion, optimal_X;
 
@@ -171,7 +181,7 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, input logic [9:
 
 
 
-    always_ff @ (posedge Reset or posedge frame_clk)
+    always_ff @ (posedge Reset or posedge frame_clk or posedge isDefeated or posedge death)
     begin
 
             if (Reset)
@@ -186,11 +196,22 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, input logic [9:
 
             end
 
+
+            else if (death)
+            begin
+    
+                ghostXmotion <= 0;
+                ghostYmotion <= 0;
+            end
+
+
+
             else if (isDefeated == 1)
             begin
                 ghostXmotion <= 0;
-            ghostYmotion <= 0;
-
+                ghostYmotion <= 0;
+                ghostX <= 496;
+                ghostY <= 96;
             end
 
 
@@ -250,7 +271,7 @@ endmodule
 
 
 
-module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_aquaX, output [9:0] ghost_aquaY );
+module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_aquaX, output [9:0] ghost_aquaY );
 
     logic [9:0] ghostX, ghostY, ghostXmotion, ghostYmotion, optimal_X;
 
@@ -302,7 +323,7 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, input logic [9:
 
 
 
-    always_ff @ (posedge frame_clk or posedge Reset)
+    always_ff @ (posedge frame_clk or posedge Reset or posedge isDefeated or posedge death)
     begin
         if (Reset)
 
@@ -315,20 +336,29 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, input logic [9:
             ghostYmotion <= 0;
 
         end
+
+        else if (death)
+        begin
+
+            ghostXmotion <= 0;
+            ghostYmotion <= 0;
+        end
+
+
+        else if (isDefeated == 1)
+            begin
+                ghostX <= 96;
+                ghostY <= 400;
+                ghostXmotion <= 0;
+                ghostYmotion <= 0;
+            end
+
         else if (hasMoved == 0)
         begin
             ghostXmotion <= 0;
             ghostYmotion <= 0;
         
         end
-
-
-        else if (isDefeated == 1)
-            begin
-                ghostXmotion <= 0;
-            ghostYmotion <= 0;
-
-            end
 
 
 

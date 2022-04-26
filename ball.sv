@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------
 
 
-module  pacman ( input Reset, frame_clk, isDefeated,
+module  pacman ( input Reset, frame_clk, isDefeated, death,
 					input [7:0] keycode,
                output [9:0]  BallX, BallY, output logic [1:0] last_keypress, output logic hasMoved);
     
@@ -33,7 +33,7 @@ module  pacman ( input Reset, frame_clk, isDefeated,
 	logic stop_motion;
 
    
-    always_ff @ (posedge Reset or posedge frame_clk )
+    always_ff @ (posedge Reset or posedge frame_clk or posedge isDefeated or posedge death)
     begin: Move_Pacman
         if (Reset)  // Asynchronous Reset
         begin 
@@ -45,12 +45,27 @@ module  pacman ( input Reset, frame_clk, isDefeated,
 				hasMoved <= 0;
         end
 
-		else if (isDefeated == 1)
+		else if (death == 1)
 
 		begin
 			Ball_X_Motion <= 0;
 			Ball_Y_Motion <= 0;
 		end
+
+
+		else if (isDefeated == 1) //life lost
+
+		begin
+
+
+			Ball_Y_Motion <= 10'b0; //Ball_Y_Step;
+			Ball_X_Motion <= 10'b0; //Ball_X_Step;
+			Ball_Y_Pos <= Ball_Y_Center;
+			Ball_X_Pos <= Ball_X_Center;
+			hasMoved <= 0;
+
+		end
+
 
 		else if (stop_motion == 1'b1)
 		begin

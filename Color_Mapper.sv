@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -31,8 +31,9 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
      this single line is quite powerful descriptively, it causes the synthesis tool to use up three
      of the 12 available multipliers on the chip!  Since the multiplicants are required to be signed,
 	  we have to first cast them from logic to int (signed by default) before they are multiplied). */
-	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data;
-    int DistX, DistY;
+	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data;
+    logic [10:0] game_over_addr;
+	 int DistX, DistY;
 
 
 
@@ -51,13 +52,6 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 		
      end
      
-     always_comb begin
-        isEaten = 1'b0;
-
-        if (pacmanX == ghost_redX && pacmanY == ghost_redY)
-        isEaten = 1'b1;
-
-     end
        
 
 
@@ -67,7 +61,14 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
         Red = 0;
         Blue = 0;
         Green = 0;
+		  game_over_addr = 0;
 
+			if (death == 0)
+			begin
+
+                Red = 0;
+                Blue = 0;
+                Green = 0;
 
         if (wall_on == 1'b1)
         begin
@@ -168,7 +169,59 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
         end
     end
 
+		end
+		
+		else
+		begin
+		Red = 0; 
+		Blue = 0;
+		Green = 0;
+		game_over_addr = 0;
+		if (DrawY >= 240 && DrawY < 256 && DrawX >= 296 && DrawX < 368)
+		begin
+		
+		case(((DrawX - 296) >> 3))
+		    0: game_over_addr = (8'h67 *16 + DrawY -240); //G
+			 1: game_over_addr = (8'h61 * 16 + DrawY - 240); //A
+			 2: game_over_addr = (8'h6D * 16 + DrawY - 240); //M
+			 3: game_over_addr = (8'h65 * 16 + DrawY - 240); //E
+			 4: game_over_addr = (8'h00 * 16 + DrawY - 240); // 
+			 5: game_over_addr = (8'h6F * 16 + DrawY - 240); //O
+			 6: game_over_addr = (8'h76 * 16 + DrawY - 240); //V
+			 7: game_over_addr = (8'h65 * 16 + DrawY - 240); //E
+			 8: game_over_addr = (8'h72 * 16 + DrawY - 240); //R
+			default: game_over_addr = 0;
+		
+		
+		endcase
+		
+		case (game_over_data[7-((DrawX - 296)%8)])
+		
+		1: begin
+			Red = 8'hff;
+			Blue = 8'h0;
+			Green = 8'hff; 
+			end
+			
+		0: begin 
+			Red = 8'h0;
+			Blue = 8'h0;
+			Green = 8'h0; 
+			end
 
+        default : begin
+            Red = 0;
+            Blue = 0;
+            Green = 0;
+
+        end
+			
+		endcase
+		
+		end
+		
+		
+		end
 
     end 
     
@@ -183,6 +236,8 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
     ghost_on go (.*);
 
     check_wall cw(.DrawX, .DrawY, .wallEnable(wall_on));
+	 
+	 font_rom game_over (.addr(game_over_addr), .data(game_over_data));
 	 
 endmodule
 

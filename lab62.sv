@@ -161,19 +161,58 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	 logic [19:0] distance_red, distance_green, distance_aqua;
 
-	 logic hasMoved, isDefeated;
+	 logic [1:0] lives;
+
+	 logic hasMoved, isDefeated, death;
+
+	 always_ff @ (posedge MAX10_CLK1_50 or posedge Reset_h)
+	 begin
+
+		if (Reset_h)
+		begin
+			lives <= 2;
+			death <= 0;
+		end
 
 
+		else if (lives <= 0)
+		death <= 1;
 
-	 always_comb begin
+		else if (isDefeated == 1 && lives > 0 && death == 0)
+		begin
+			lives <= (lives-1);
 
-
-		isDefeated = 1'b0;
-		if (distance_red < 64 || distance_green < 64 || distance_aqua < 64)
-		isDefeated = 1;
-
+		end
 
 	 end
+	 
+	 
+	 always_comb begin
+	 	if (distance_red < 64 || distance_green < 64 || distance_aqua < 64)
+			isDefeated = 1;
+
+		else 
+			isDefeated = 0;
+	 
+	 
+	 end
+
+	//  always_comb
+	//  begin
+	// 	death = 0;
+	// 	if (lives == 0)
+	// 	death = 1;
+
+
+	//  end
+
+	//  always_comb begin
+
+	// 	death = 0;
+	// 	if (lives == 0)
+	// 		death = 1;
+
+	//  end
 
 
 	 ghost_pacman_distance pdr (.pacmanX(ballxsig), .pacmanY(ballysig), .ghostX(ghost_redX), .ghostY(ghost_redY), .distance(distance_red));
@@ -191,17 +230,17 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 	vga_controller vgc(.Clk(MAX10_CLK1_50), .Reset(Reset_h), .hs(VGA_HS), .vs(VGA_VS), .DrawX(drawxsig), .DrawY(drawysig), .pixel_clk(VGA_Clk), .blank, .sync);
 	
 
-	ghost_red gr (.Reset(Reset_h), .frame_clk(VGA_VS), .pacmanX(ballxsig), .pacmanY(ballysig), .hasMoved, .isDefeated, .ghost_redX, .ghost_redY);
+	ghost_red gr (.Reset(Reset_h), .frame_clk(VGA_VS), .pacmanX(ballxsig), .pacmanY(ballysig), .hasMoved, .isDefeated, .death, .ghost_redX, .ghost_redY);
 
-	ghost_green gg (.Reset(Reset_h), .frame_clk(VGA_VS), .pacmanX(ballxsig), .pacmanY(ballysig), .hasMoved, .isDefeated, .ghost_greenX, .ghost_greenY);
-
-
-	ghost_aqua ga (.Reset(Reset_h), .frame_clk(VGA_VS), .pacmanX(ballxsig), .pacmanY(ballysig), .hasMoved, .isDefeated, .ghost_aquaX, .ghost_aquaY);
+	ghost_green gg (.Reset(Reset_h), .frame_clk(VGA_VS), .pacmanX(ballxsig), .pacmanY(ballysig), .hasMoved, .isDefeated, .death, .ghost_greenX, .ghost_greenY);
 
 
-	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .isDefeated, .hasMoved);
+	ghost_aqua ga (.Reset(Reset_h), .frame_clk(VGA_VS), .pacmanX(ballxsig), .pacmanY(ballysig), .hasMoved, .isDefeated, .death, .ghost_aquaX, .ghost_aquaY);
+
+
+	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
 
 
 endmodule
