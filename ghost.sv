@@ -51,7 +51,7 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
 
 
 
-    always_ff @ (posedge Reset or posedge frame_clk or posedge isDefeated or posedge death)
+    always_ff @ (posedge Reset or posedge frame_clk)
     begin
         if (Reset)
             begin
@@ -181,7 +181,7 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
 
 
-    always_ff @ (posedge Reset or posedge frame_clk or posedge isDefeated or posedge death)
+    always_ff @ (posedge Reset or posedge frame_clk)
     begin
 
             if (Reset)
@@ -323,7 +323,7 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
 
 
-    always_ff @ (posedge frame_clk or posedge Reset or posedge isDefeated or posedge death)
+    always_ff @ (posedge frame_clk or posedge Reset)
     begin
         if (Reset)
 

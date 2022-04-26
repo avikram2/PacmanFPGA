@@ -1,0 +1,28 @@
+module pacman_counter(input frame_clk, Reset, output closePacman); //counter for the pacman sprite animation
+
+
+logic [2:0] counter;
+
+
+always_ff @ (posedge Reset or posedge frame_clk)
+begin
+
+if (Reset)
+begin
+closePacman <= 0;
+counter <= 0;
+end
+
+else if (counter == 6)
+begin
+closePacman <= (~closePacman);
+counter <= 0;
+end
+
+
+else
+counter <= (counter +1);
+
+end
+
+endmodule

@@ -163,9 +163,9 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	 logic [1:0] lives;
 
-	 logic hasMoved, isDefeated, death;
+	 logic hasMoved, isDefeated, death, closePacman;
 
-	 always_ff @ (posedge MAX10_CLK1_50 or posedge Reset_h)
+	 always_ff @ (posedge VGA_VS or posedge Reset_h)
 	 begin
 
 		if (Reset_h)
@@ -188,7 +188,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 	 
 	 
 	 always_comb begin
-	 	if (distance_red < 64 || distance_green < 64 || distance_aqua < 64)
+	 	if (distance_red < 64 || distance_green < 64 || distance_aqua < 64) 
 			isDefeated = 1;
 
 		else 
@@ -240,7 +240,8 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
 
+	pacman_counter pc (.frame_clk(VGA_VS), .Reset(Reset_h), .hasMoved, .closePacman);
 
 endmodule

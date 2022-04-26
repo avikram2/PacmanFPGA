@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, closePacman, input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -31,7 +31,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
      this single line is quite powerful descriptively, it causes the synthesis tool to use up three
      of the 12 available multipliers on the chip!  Since the multiplicants are required to be signed,
 	  we have to first cast them from logic to int (signed by default) before they are multiplied). */
-	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data;
+	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed;
     logic [10:0] game_over_addr;
 	 int DistX, DistY;
 
@@ -83,6 +83,23 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 		  Red = 0;
 		  Blue = 0; 
 		  Green = 0;
+
+
+        if (closePacman == 1)
+        begin
+
+            if (pac_data_closed[7-DistX] == 1)
+            begin
+                Red = 8'hff;
+				Blue = 8'h0;
+				Green = 8'hff;
+            end
+
+        end
+
+        else 
+        begin
+
           if (last_keypress == 0)
           begin
             if (RGB_data_right[7-DistX] == 1'b1)
@@ -126,6 +143,8 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
         end
 
     end
+
+end
     
     else if (ghost_red_on == 1'b1)
 
@@ -229,6 +248,11 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 	 pacman_rom_right pac_right(.addr(DistY), .data(RGB_data_right));
      pacman_rom_up top_pac(.addr(DistY), .data(RGB_data_top));
 	pacman_rom_up pacbottom(.addr(7-DistY), .data(RGB_data_bottom));
+
+    pacman_rom_closed pacclosed (.addr(DistY), .data(pac_data_closed));
+
+
+
     ghost ghost_red(.addr(DrawY - ghost_redY),  .data(ghost_red_data));
     ghost ghost_green(.addr(DrawY - ghost_greenY),  .data(ghost_green_data));
     ghost ghost_aqua(.addr(DrawY - ghost_aquaY), .data(ghost_aqua_data));
