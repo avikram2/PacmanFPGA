@@ -19,7 +19,7 @@ module  pacman ( input Reset, frame_clk, isDefeated, death,
     
     logic [9:0] Ball_X_Pos, Ball_X_Motion, Ball_Y_Pos, Ball_Y_Motion;
 	 
-    parameter [9:0] Ball_X_Center=304;  // Center position on the X axis
+    parameter [9:0] Ball_X_Center=136;  // Center position on the X axis
     parameter [9:0] Ball_Y_Center=248;  // Center position on the Y axis
     parameter [9:0] Ball_X_Min=0;       // Leftmost point on the X axis
     parameter [9:0] Ball_X_Max=639;     // Rightmost point on the X axis

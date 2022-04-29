@@ -124,8 +124,8 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
     begin
         if (Reset)
             begin
-                ghostX <= 384;
-                ghostY <= 96;
+                ghostX <= 64;
+                ghostY <= 64;
                 ghostXmotion <= 0;
                 ghostYmotion <= 0;
 
@@ -141,8 +141,8 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
 
         else if (isDefeated == 1)
             begin
-                ghostX <= 384;
-                ghostY <= 96;
+                ghostX <= 64;
+                ghostY <= 64;
                 ghostXmotion <= 0;
                 ghostYmotion <= 0;
 
@@ -330,8 +330,8 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
             begin
 
-                ghostX <= 384;
-                ghostY <= 88;
+                ghostX <= 304;
+                ghostY <= 64;
                 ghostXmotion <= 0;
                 ghostYmotion <= 0;
 
@@ -351,8 +351,8 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input lo
             begin
                 ghostXmotion <= 0;
                 ghostYmotion <= 0;
-                ghostX <= 384;
-                ghostY <= 88;
+                ghostX <= 304;
+                ghostY <= 64;
             end
 
 
@@ -540,8 +540,8 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
         begin
 
-            ghostX <= 88;
-            ghostY <= 400;
+            ghostX <= 368;
+            ghostY <= 368;
             ghostXmotion <= 0;
             ghostYmotion <= 0;
 
@@ -557,8 +557,8 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
         else if (isDefeated == 1)
             begin
-                ghostX <= 88;
-            ghostY <= 400;
+                ghostX <= 368;
+            ghostY <= 368;
                 ghostXmotion <= 0;
                 ghostYmotion <= 0;
             end

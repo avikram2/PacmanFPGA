@@ -1,9 +1,9 @@
-18:39:30 **** Incremental Build of configuration Nios II for project usb_ksb ****
+17:19:36 **** Build of configuration Nios II for project usb_ksb ****
 make all 
 Info: Building ../usb_kb_bsp/
 make --no-print-directory -C ../usb_kb_bsp/
 [BSP build complete]
 [usb_kb build complete]
 
-18:39:30 Build Finished (took 530ms)
+17:19:36 Build Finished (took 599ms)
 
