@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, closePacman, input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, closePacman, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -31,7 +31,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
      this single line is quite powerful descriptively, it causes the synthesis tool to use up three
      of the 12 available multipliers on the chip!  Since the multiplicants are required to be signed,
 	  we have to first cast them from logic to int (signed by default) before they are multiplied). */
-	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed;
+	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data;
     logic [10:0] game_over_addr;
 	 int DistX, DistY;
 
@@ -70,12 +70,79 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
                 Blue = 0;
                 Green = 0;
 
+
+                if (first_on == 1)
+        begin
+            if (((DrawX - fruit_location[0]) >= 0) && ((DrawX - fruit_location[0]) < 8) && ((DrawY - fruit_location[1]) >= 0) && ((DrawY - fruit_location[1]) < 8))
+            begin 
+                if (fruit1_data[7-(DrawX - fruit_location[4])] == 1)
+                begin
+                Red = 8'h7f;
+
+                Blue = 8'hff;
+
+
+                Green = 0;
+
+                end
+
+            end
+
+        end
+
+
+
+        if (second_on == 1)
+        begin
+            if (((DrawX - fruit_location[2]) >= 0) && ((DrawX - fruit_location[2]) < 8) && ((DrawY - fruit_location[3]) >= 0) && ((DrawY - fruit_location[3]) < 8))
+            begin 
+                
+                if (fruit2_data[7-(DrawX - fruit_location[4])] == 1)
+                begin
+                Red = 8'h7f;
+
+                Blue = 8'hff;
+
+
+                Green = 0;
+
+                end
+
+            
+            end
+        end
+
+
+        if (third_on == 1)
+        begin
+            if (((DrawX - fruit_location[4]) >= 0) && ((DrawX - fruit_location[4]) < 8) && ((DrawY - fruit_location[5]) >= 0) && ((DrawY - fruit_location[5]) < 8))
+            begin 
+
+                if (fruit3_data[7-(DrawX - fruit_location[4])] == 1)
+                begin
+                Red = 8'h7f;
+
+                Blue = 8'hff;
+
+
+                Green = 0;
+
+                end
+
+            end
+
+        end
+
+
+
         if (wall_on == 1'b1)
         begin
             Red = 0;
             Blue = 8'hff;
             Green = 0;
         end
+
+
 
 
         else if ((pacman_on == 1'b1)) 
@@ -262,6 +329,14 @@ end
     check_wall cw(.DrawX, .DrawY, .wallEnable(wall_on));
 	 
 	 font_rom game_over (.addr(game_over_addr), .data(game_over_data));
+
+
+     fruit f1 (.addr(DrawY - fruit_location[1]), .data(fruit1_data));
+
+
+     fruit f2 (.addr(DrawY - fruit_location[3]), .data(fruit2_data));
+
+     fruit f3 (.addr(DrawY - fruit_location[5]), .data(fruit3_data));
 	 
 endmodule
 

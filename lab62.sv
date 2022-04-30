@@ -159,11 +159,15 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 		
 	 );
 
-	 logic [19:0] distance_red, distance_green, distance_aqua;
+	 logic [19:0] distance_red, distance_green, distance_aqua, distance1, distance2, distance3;
 
 	 logic [1:0] lives;
 
 	 logic hasMoved, isDefeated, death, closePacman;
+
+	logic first_on, second_on, third_on;
+
+	 logic [9:0] fruit_location [6] = '{184, 80, 208, 256, 232, 352};
 
 	 always_ff @ (posedge VGA_VS or posedge Reset_h)
 	 begin
@@ -185,6 +189,49 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 		end
 
 	 end
+
+	 assign distance1 = (ballxsig - 184)*(ballxsig-184) + (ballysig - 80)*(ballysig - 80);
+	 assign distance2 = (ballxsig - 208)*(ballxsig-208) + (ballysig - 256)*(ballysig - 256);
+	 assign distance3 = (ballxsig - 232)*(ballxsig-232) + (ballysig - 352)*(ballysig - 352);
+
+
+	 always_ff@ (posedge MAX10_CLK1_50 or posedge Reset_h)
+
+
+	 begin
+		if (Reset_h)
+		begin
+			first_on <= 1'b1;
+			second_on <= 1'b1;
+			third_on <= 1'b1;
+
+		end 
+
+		else if (distance1 < 64)
+		// enable_fruit[0] <= 0;
+		first_on <= 1'b0;
+
+		else if (distance2 < 64)
+		// enable_fruit[1] <= 0;
+		second_on <= 1'b0;
+
+		else if (distance3 < 64)
+		// enable_fruit[2] <= 0;
+		third_on <= 1'b0;
+
+
+		else
+		begin
+			first_on <= first_on;
+			second_on <= second_on;
+			third_on <= third_on;
+
+		end
+		
+
+	 end
+
+
 	 
 	 
 	 always_comb begin
@@ -240,7 +287,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .first_on, .second_on, .third_on, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
 
 	pacman_counter pc (.frame_clk(VGA_VS), .Reset(Reset_h), .hasMoved, .closePacman);
 
