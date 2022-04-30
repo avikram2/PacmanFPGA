@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, closePacman, reversal, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -213,7 +213,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 
 end
     
-    else if (ghost_red_on == 1'b1)
+    else if (ghost_red_on == 1'b1 && red_enable == 1)
 
     begin
         Red = 0;
@@ -235,7 +235,7 @@ end
         end
     end
     
-    else if (ghost_green_on == 1'b1)
+    else if (ghost_green_on == 1'b1 && green_enable == 1)
 
     begin
         Red = 0;
@@ -255,7 +255,7 @@ end
         end
     end
     
-    else if (ghost_aqua_on == 1'b1)
+    else if (ghost_aqua_on == 1'b1 && aqua_enable == 1)
 
     begin
         Red = 0;

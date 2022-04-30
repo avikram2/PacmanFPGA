@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------
 
 
-module  pacman ( input Reset, frame_clk, isDefeated, death,
+module  pacman ( input Reset, frame_clk, isDefeated, death, reversal,
 					input [7:0] keycode,
                output [9:0]  BallX, BallY, output logic [1:0] last_keypress, output logic hasMoved);
     
@@ -53,7 +53,7 @@ module  pacman ( input Reset, frame_clk, isDefeated, death,
 		end
 
 
-		else if (isDefeated == 1) //life lost
+		else if (isDefeated == 1 && reversal == 0) //life lost
 
 		begin
 

@@ -1,4 +1,4 @@
-module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_redX, output [9:0] ghost_redY);
+module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, reversal, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_redX, output [9:0] ghost_redY);
 
 
     logic [9:0] ghostX, ghostY, ghostXmotion, ghostYmotion;
@@ -95,7 +95,23 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
 
         endcase
 
+        if (direction == 5)
+        begin
+        if (right_stop_motion == 0)
+        direction = 0;
 
+
+        else if (up_stop_motion == 0)
+        direction = 3;
+
+
+        else if (left_stop_motion == 0)
+        direction = 2;
+
+        else if (down_stop_motion == 0)
+        direction = 1;
+
+        end
 
 
         // if (right_stop_motion == 0)
@@ -112,11 +128,8 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
         // else if (down_stop_motion == 0)
         // direction = 1;
 
-
-        
-
         end
-        end
+    end
 
 
 
@@ -139,7 +152,7 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
             ghostYmotion <= 0;
         end
 
-        else if (isDefeated == 1)
+        else if (isDefeated == 1 && reversal == 0)
             begin
                 ghostX <= 64;
                 ghostY <= 64;
@@ -192,7 +205,7 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, death, input log
 
     ghost_wall_check gwc (.ghostX, .ghostY, .right_stop_motion, .up_stop_motion, .left_stop_motion, .down_stop_motion);
 
-    findMinFour fmf (.A(distance_up), .B(distance_down), .C(distance_left), .D(distance_right), .minVal(min_distance));
+    findMinFour fmf (.A(distance_up), .B(distance_down), .C(distance_left), .D(distance_right), .reversal(reversal), .minVal(min_distance));
 
 
 
@@ -201,7 +214,7 @@ endmodule
 
 
 
-module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_greenX, output [9:0] ghost_greenY );
+module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, reversal, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_greenX, output [9:0] ghost_greenY );
 
     logic [9:0] ghostX, ghostY, ghostXmotion, ghostYmotion, optimal_X;
 
@@ -299,20 +312,23 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
 
 
-
-        // if (right_stop_motion == 0)
-        // direction = 0;
-
-
-        // else if (up_stop_motion == 0)
-        // direction = 3;
+        if (direction == 5)
+        begin
+        if (right_stop_motion == 0)
+        direction = 0;
 
 
-        // else if (left_stop_motion == 0)
-        // direction = 2;
+        else if (up_stop_motion == 0)
+        direction = 3;
 
-        // else if (down_stop_motion == 0)
-        // direction = 1;
+
+        else if (left_stop_motion == 0)
+        direction = 2;
+
+        else if (down_stop_motion == 0)
+        direction = 1;
+
+        end
 
 
         
@@ -347,7 +363,7 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
 
 
-            else if (isDefeated == 1)
+            else if (isDefeated == 1 && reversal == 0)
             begin
                 ghostXmotion <= 0;
                 ghostYmotion <= 0;
@@ -405,14 +421,14 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
     ghost_wall_check gwc (.ghostX, .ghostY, .right_stop_motion, .up_stop_motion, .left_stop_motion, .down_stop_motion);
 
-    findMinFour fmf (.A(distance_up), .B(distance_down), .C(distance_left), .D(distance_right), .minVal(min_distance));
+    findMinFour fmf (.A(distance_up), .B(distance_down), .C(distance_left), .D(distance_right), .reversal(reversal), .minVal(min_distance));
 
 
 endmodule
 
 
 
-module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_aquaX, output [9:0] ghost_aquaY );
+module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, reversal, input logic [9:0] pacmanX, input logic [9:0] pacmanY, output [9:0] ghost_aquaX, output [9:0] ghost_aquaY );
 
     logic [9:0] ghostX, ghostY, ghostXmotion, ghostYmotion, optimal_X;
 
@@ -509,7 +525,23 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input lo
         endcase
 
 
+        if (direction == 5)
+        begin
+        if (right_stop_motion == 0)
+        direction = 0;
 
+
+        else if (up_stop_motion == 0)
+        direction = 3;
+
+
+        else if (left_stop_motion == 0)
+        direction = 2;
+
+        else if (down_stop_motion == 0)
+        direction = 1;
+
+        end
 
         // if (right_stop_motion == 0)
         // direction = 0;
@@ -555,7 +587,7 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input lo
         end
 
 
-        else if (isDefeated == 1)
+        else if (isDefeated == 1 && reversal == 0)
             begin
                 ghostX <= 368;
             ghostY <= 368;
@@ -614,7 +646,7 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, input lo
 
     ghost_wall_check gwc (.ghostX, .ghostY, .right_stop_motion, .up_stop_motion, .left_stop_motion, .down_stop_motion);
 
-    findMinFour fmf (.A(distance_up), .B(distance_down), .C(distance_left), .D(distance_right), .minVal(min_distance));
+    findMinFour fmf (.A(distance_up), .B(distance_down), .C(distance_left), .D(distance_right), .reversal(reversal), .minVal(min_distance));
 
 endmodule
 
@@ -686,7 +718,10 @@ endmodule
 
 
 
-module findMinFour(input logic [19:0] A, B, C, D, output [19:0] minVal);
+module findMinFour(input logic [19:0] A, B, C, D, input reversal, output [19:0] minVal);
+
+
+
 
     logic [19:0] minVal_;
 	 
@@ -695,11 +730,25 @@ module findMinFour(input logic [19:0] A, B, C, D, output [19:0] minVal);
 	
 
 	  minVal_ = A;
+
+      if (reversal == 0)
+      begin
       minVal_ = (B < minVal_)? B: minVal_;
 
       minVal_ = (C < minVal_)? C: minVal_;
 
       minVal_ = (D < minVal_)? D: minVal_;
+
+      end
+
+      else
+      begin
+        minVal_ = (B > minVal_)? B: minVal_;
+
+        minVal_ = (C > minVal_)? C: minVal_;
+
+        minVal_ = (D > minVal_)? D: minVal_;
+      end 
 	 
 	 
 	 end
