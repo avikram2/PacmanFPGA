@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, closePacman, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, closePacman, reversal, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -221,9 +221,17 @@ end
         Blue = 0;
         if (ghost_red_data[7-(DrawX-ghost_redX)] == 1'b1)
         begin
+            if (reversal == 0)
+            begin
             Red = 8'hff; 
             Blue = 8'h0;
             Green = 8'h0;
+            end
+
+            else
+            begin
+                Blue = 8'hff;
+            end
         end
     end
     
@@ -235,9 +243,15 @@ end
         Blue = 0;
         if (ghost_green_data[7-(DrawX-ghost_greenX)] == 1'b1)
         begin
+            if (reversal == 0)
+            begin
             Red = 8'h0; 
             Blue = 8'h0;
             Green = 8'hff;
+            end
+
+            else
+            Blue = 8'hff;
         end
     end
     
@@ -249,9 +263,14 @@ end
         Blue = 0;
         if (ghost_aqua_data[7-(DrawX-ghost_aquaX)] == 1'b1)
         begin
+            if (reversal == 0)
+            begin
             Red = 8'h33; 
             Blue = 8'hff;
             Green = 8'hff;
+            end
+            else 
+            Blue = 8'hff;
         end
     end
 

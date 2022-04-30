@@ -163,11 +163,13 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	 logic [1:0] lives;
 
-	 logic hasMoved, isDefeated, death, closePacman;
+	 logic hasMoved, isDefeated, death, closePacman, reversal;
 
 	logic first_on, second_on, third_on;
 
 	 logic [9:0] fruit_location [6] = '{184, 80, 208, 256, 232, 352};
+
+	 logic [9:0] reversal_counter;
 
 	 always_ff @ (posedge VGA_VS or posedge Reset_h)
 	 begin
@@ -195,7 +197,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 	 assign distance3 = (ballxsig - 232)*(ballxsig-232) + (ballysig - 352)*(ballysig - 352);
 
 
-	 always_ff@ (posedge MAX10_CLK1_50 or posedge Reset_h)
+	 always_ff@ (posedge VGA_VS or posedge Reset_h)
 
 
 	 begin
@@ -204,29 +206,63 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 			first_on <= 1'b1;
 			second_on <= 1'b1;
 			third_on <= 1'b1;
-
+			reversal_counter <= 0;
 		end 
+
+		else if (reversal_counter == 600)
+		begin
+			reversal <= 0;
+			reversal_counter <= 0;
+		end 
+
+
+		else if (reversal == 1)
+		begin
+			reversal_counter <= (reversal_counter + 1);
+		end
 
 		else if (distance1 < 64)
 		// enable_fruit[0] <= 0;
+		begin
+
+
+
+		if (first_on == 1)
+		begin
 		first_on <= 1'b0;
+		reversal <= 1'b1;
+		end
+
+
+		end
 
 		else if (distance2 < 64)
 		// enable_fruit[1] <= 0;
-		second_on <= 1'b0;
 
-		else if (distance3 < 64)
-		// enable_fruit[2] <= 0;
-		third_on <= 1'b0;
-
-
-		else
 		begin
-			first_on <= first_on;
-			second_on <= second_on;
-			third_on <= third_on;
+
+
+
+		if (second_on == 1)
+		begin
+		second_on <= 1'b0;
+		reversal <= 1'b1;
+		end
+
 
 		end
+		else if (distance3 < 64)
+		begin
+		// enable_fruit[2] <= 0;
+
+		if (third_on == 1)
+		begin
+		third_on <= 1'b0;
+		reversal <= 1'b1;
+		end
+
+		end
+		
 		
 
 	 end
@@ -287,7 +323,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .first_on, .second_on, .third_on, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .first_on, .reversal, .second_on, .third_on, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
 
 	pacman_counter pc (.frame_clk(VGA_VS), .Reset(Reset_h), .hasMoved, .closePacman);
 
