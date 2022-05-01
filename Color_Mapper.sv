@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input [41:0][41:0] dots, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -31,7 +31,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
      this single line is quite powerful descriptively, it causes the synthesis tool to use up three
      of the 12 available multipliers on the chip!  Since the multiplicants are required to be signed,
 	  we have to first cast them from logic to int (signed by default) before they are multiplied). */
-	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data;
+	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data, dot_data;
     logic [10:0] game_over_addr;
 	 int DistX, DistY;
 
@@ -70,6 +70,20 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
                 Blue = 0;
                 Green = 0;
 
+                if (DrawX >= 56 && DrawX <= 392 && DrawY >= 56 && DrawY <= 392)
+                begin
+                    if (dots[(DrawX-56)/8][(DrawY-56)/8] == 1)
+                    begin
+                        if (dot_data[((DrawX - 56)%8)] == 1)
+                        begin
+                            Red = 8'hff;
+                            Green = 8'hb2;
+                            Blue = 8'h66;
+                        end
+
+                    end
+
+                end
 
                 if (first_on == 1)
         begin
@@ -356,6 +370,9 @@ end
      fruit f2 (.addr(DrawY - fruit_location[3]), .data(fruit2_data));
 
      fruit f3 (.addr(DrawY - fruit_location[5]), .data(fruit3_data));
+
+
+     dot d1 (.addr((DrawY - 56)%8), .data(dot_data));
 	 
 endmodule
 

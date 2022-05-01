@@ -95,10 +95,10 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 	assign ARDUINO_IO[6] = 1'b1;
 	
 	//HEX drivers to convert numbers to HEX output
-	HexDriver hex_driver4 (hex_num_4, HEX4[6:0]);
+	HexDriver hex_driver4 (score[3:0], HEX4[6:0]);
 	assign HEX4[7] = 1'b1;
 	
-	HexDriver hex_driver3 (hex_num_3, HEX3[6:0]);
+	HexDriver hex_driver3 (score[5:4], HEX3[6:0]);
 	assign HEX3[7] = 1'b1;
 	
 	HexDriver hex_driver1 (hex_num_1, HEX1[6:0]);
@@ -306,6 +306,32 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 	 
 	 end
 
+
+
+	 logic [41:0][41:0] dots = '1;
+	 //
+	 logic [5:0] score;
+
+	 always_ff @ (Reset_h or VGA_VS)
+	 begin
+	 if (Reset_h)
+	 begin
+	 dots <= '1;
+	 score <= 0;
+	 end
+
+	 else if (ballxsig >= 56 && ballxsig <= 392 && ballysig >= 56 && ballysig <= 392)
+		begin
+			if (dots[(ballxsig-56)/8][(ballysig-56)/8] == 1)
+			begin
+				score <= (score+1);
+				dots[(ballxsig-56)/8][(ballysig-56)/8] <= 0;
+			end
+		end
+
+	 end
+//DrawY = 42 blocks, from 56 to Draw X = 392
+//DrawX = 42, from 56 to 392
 	//  always_comb
 	//  begin
 	// 	death = 0;
@@ -349,7 +375,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .reversal, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .first_on, .reversal, .second_on, .third_on, .green_enable, .red_enable, .aqua_enable, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .closePacman, .first_on, .dots, .reversal, .second_on, .third_on, .green_enable, .red_enable, .aqua_enable, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
 
 	pacman_counter pc (.frame_clk(VGA_VS), .Reset(Reset_h), .hasMoved, .closePacman);
 

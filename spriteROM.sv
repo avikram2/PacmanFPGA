@@ -125,3 +125,29 @@ assign data = ROM[addr];
 
 
 endmodule
+
+
+module dot ( input [2:0] addr,
+    output [7:0]	data
+ );
+
+parameter ADDR_WIDTH = 3;
+parameter DATA_WIDTH =  8;
+logic [ADDR_WIDTH-1:0] addr_reg;
+
+// ROM definition				
+parameter [0:2**ADDR_WIDTH-1][DATA_WIDTH-1:0] ROM = {
+    8'b00000000,
+    8'b00000000,
+    8'b01111110,
+    8'b01111110,
+    8'b01111110,
+    8'b01111110,
+    8'b00000000,
+    8'b00000000
+};
+
+assign data = ROM[addr];
+
+
+endmodule
