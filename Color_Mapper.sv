@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input [41:0][41:0] dots, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input [1:0] lives, input [41:0][41:0] dots, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -31,8 +31,8 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
      this single line is quite powerful descriptively, it causes the synthesis tool to use up three
      of the 12 available multipliers on the chip!  Since the multiplicants are required to be signed,
 	  we have to first cast them from logic to int (signed by default) before they are multiplied). */
-	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data, dot_data;
-    logic [10:0] game_over_addr;
+	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data, dot_data, lives_data;
+    logic [10:0] game_over_addr, lives_addr;
 	 int DistX, DistY;
 
 
@@ -62,6 +62,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
         Blue = 0;
         Green = 0;
 		  game_over_addr = 0;
+          lives_addr = 0;
 
 			if (death == 0)
 			begin
@@ -69,6 +70,31 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
                 Red = 0;
                 Blue = 0;
                 Green = 0;
+
+                if (DrawX >= 456 && DrawX < 520 && DrawY >= 96 && DrawY < 112)
+                begin
+
+                    case(((DrawX - 456) >> 3))
+                         0: lives_addr= (8'h6c *16 + DrawY -96); //L
+                         1: lives_addr = (8'h69 * 16 + DrawY - 96); //I
+                         2: lives_addr = (8'h76 * 16 + DrawY - 96); //V
+                         3: lives_addr = (8'h65 * 16 + DrawY - 96); //E
+                         4: lives_addr = (8'h73 * 16 + DrawY - 96); //S 
+                         5: lives_addr = (8'h3a * 16 + DrawY - 96); //:
+								 6: lives_addr = (8'h00 * 16 + DrawY - 96); // 
+                         7: lives_addr = ((lives + 8'h30) * 16 + DrawY - 96); //#
+                         default: lives_addr = 0;
+
+                    endcase
+
+                    if (lives_data[7-((DrawX - 456)%8)] == 1)
+                    begin
+                        Red = 8'hff;
+			            Blue = 8'hff;
+			            Green = 8'hff; 
+                    end
+
+                end
 
                 if (DrawX >= 56 && DrawX <= 392 && DrawY >= 56 && DrawY <= 392)
                 begin
@@ -362,6 +388,8 @@ end
     check_wall cw(.DrawX, .DrawY, .wallEnable(wall_on));
 	 
 	 font_rom game_over (.addr(game_over_addr), .data(game_over_data));
+
+     font_rom lives_rom (.addr(lives_addr), .data(lives_data));
 
 
      fruit f1 (.addr(DrawY - fruit_location[1]), .data(fruit1_data));
