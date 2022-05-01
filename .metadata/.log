@@ -2263,3 +2263,9 @@ javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
 
 !ENTRY com.altera.sbtgui.launch 1 0 2022-05-01 02:06:39.638
 !MESSAGE Executing: [/bin/bash, -c, nios2-download '--cable=USB-Blaster on localhost [1-3]' --device=1 --instance=0 --go --sidp=0x58 --id=0x0 --timestamp=1647995859 /home/ece385user/Downloads/lab62/software/usb_kb/usb_kb.elf]
+
+!ENTRY com.altera.sbtgui.launch 1 0 2022-05-01 02:25:01.374
+!MESSAGE Executing: [/bin/bash, -c, nios2-download '--cable=USB-Blaster on localhost [1-3]' --device=1 --instance=0 --stop --sidp=0x58 --id=0x0 --timestamp=1647995859]
+
+!ENTRY com.altera.sbtgui.launch 1 0 2022-05-01 02:25:03.228
+!MESSAGE Executing: [/bin/bash, -c, nios2-download '--cable=USB-Blaster on localhost [1-3]' --device=1 --instance=0 --go --sidp=0x58 --id=0x0 --timestamp=1647995859 /home/ece385user/Downloads/lab62/software/usb_kb/usb_kb.elf]

@@ -322,10 +322,10 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	 else if (ballxsig >= 56 && ballxsig <= 392 && ballysig >= 56 && ballysig <= 392)
 		begin
-			if (dots[(ballxsig-56)/8][(ballysig-56)/8] == 1)
+			if (dots[(ballxsig-56+4)/8][(ballysig-56+4)/8] == 1)
 			begin
 				score <= (score+1);
-				dots[(ballxsig-56)/8][(ballysig-56)/8] <= 0;
+				dots[(ballxsig-56+4)/8][(ballysig-56+4)/8] <= 0;
 			end
 		end
 
