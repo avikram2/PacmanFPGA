@@ -13,7 +13,7 @@
 <booleanAttribute key="org.eclipse.cdt.launch.ENABLE_REGISTER_BOOKKEEPING" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.launch.ENABLE_VARIABLE_BOOKKEEPING" value="false"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="usb_kb.elf"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="usb_ksb"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="usb_kb"/>
 <stringAttribute key="processorCableName" value="USB-Blaster on localhost [1-3]"/>
 <stringAttribute key="processorDeviceIndex" value="1"/>
 <stringAttribute key="processorInstanceId" value="0"/>

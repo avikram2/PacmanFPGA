@@ -310,9 +310,9 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	 logic [41:0][41:0] dots = '1;
 	 //
-	 logic [5:0] score;
+	 logic [10:0] score;
 
-	 always_ff @ (Reset_h or VGA_VS)
+	 always_ff @ (posedge Reset_h or posedge VGA_VS)
 	 begin
 	 if (Reset_h)
 	 begin
@@ -324,8 +324,8 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 		begin
 			if (dots[(ballxsig-56+4)/8][(ballysig-56+4)/8] == 1)
 			begin
-				score <= (score+1);
 				dots[(ballxsig-56+4)/8][(ballysig-56+4)/8] <= 0;
+				score <= (score+1);
 			end
 		end
 
@@ -375,7 +375,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .reversal, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .lives, .closePacman, .first_on, .dots, .reversal, .second_on, .third_on, .green_enable, .red_enable, .aqua_enable, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .lives, .closePacman, .first_on, .dots, .reversal, .second_on, .third_on, .score, .green_enable, .red_enable, .aqua_enable, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
 
 	pacman_counter pc (.frame_clk(VGA_VS), .Reset(Reset_h), .hasMoved, .closePacman);
 
