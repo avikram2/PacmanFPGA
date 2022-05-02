@@ -75,7 +75,6 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
                         4: score_addr = ((8'h30 + ((score/100)%10)) * 16 + DrawY - 120); //hun
                         5: score_addr = ((8'h30 + ((score/10)%10)) * 16 + DrawY - 120); //tens
                         6: score_addr = ((8'h30 + ((score)%10)) * 16 + DrawY - 120); // ones
-								 default: score_addr = 0;
 
                     endcase
 
@@ -104,7 +103,6 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
                          5: lives_addr = (8'h3a * 16 + DrawY - 96); //:
 								 6: lives_addr = (8'h00 * 16 + DrawY - 96); // 
                          7: lives_addr = ((lives + 8'h30) * 16 + DrawY - 96); //#
-                         default: lives_addr = 0;
 
                     endcase
 
@@ -339,10 +337,6 @@ end
 		
 		else
 		begin
-		Red = 0; 
-		Blue = 0;
-		Green = 0;
-		game_over_addr = 0;
 		if (DrawY >= 240 && DrawY < 256 && DrawX >= 296 && DrawX < 368)
 		begin
 		
@@ -356,34 +350,20 @@ end
 			 6: game_over_addr = (8'h76 * 16 + DrawY - 240); //V
 			 7: game_over_addr = (8'h65 * 16 + DrawY - 240); //E
 			 8: game_over_addr = (8'h72 * 16 + DrawY - 240); //R
-			default: game_over_addr = 0;
 		
 		
 		endcase
 		
-		case (game_over_data[7-((DrawX - 296)%8)])
+		if (game_over_data[7-((DrawX - 296)%8)] == 1)
 		
-		1: begin
-			Red = 8'hff;
+		begin
+	        Red = 8'hff;
 			Blue = 8'h0;
 			Green = 8'hff; 
 			end
 			
-		0: begin 
-			Red = 8'h0;
-			Blue = 8'h0;
-			Green = 8'h0; 
-			end
-
-        default : begin
-            Red = 0;
-            Blue = 0;
-            Green = 0;
-
-        end
-			
-		endcase
 		
+			
 		end
 		
 		
