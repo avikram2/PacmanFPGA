@@ -1,0 +1,16 @@
+<sld_project_info>
+  <project>
+    <hash md5_digest_80b="b488276c586c2b38c1c7"/>
+  </project>
+  <file_info>
+    <file device="10M50DAF484C7G" path="lab62.sof" usercode="0xFFFFFFFF"/>
+  </file_info>
+  <sld_infos>
+    <sld_info hpath="lab62soc:u0" name="u0">
+      <assignment_values>
+        <assignment_value text="QSYS_NAME lab62soc HAS_SOPCINFO 1 GENERATION_ID 1651740646"/>
+      </assignment_values>
+      <parameters/>
+    </sld_info>
+  </sld_infos>
+</sld_project_info>

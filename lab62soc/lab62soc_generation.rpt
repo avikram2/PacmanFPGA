@@ -1,0 +1,47 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /home/ece385user/Downloads/finalprojjoystick/lab62soc.qsys --block-symbol-file --output-directory=/home/ece385user/Downloads/finalprojjoystick/lab62soc --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading finalprojjoystick/lab62soc.qsys
+Progress: Reading input file
+Progress: Adding altpll_sys [altpll 18.1]
+Progress: Parameterizing module altpll_sys
+Progress: Adding clk_50 [clock_source 18.1]
+Progress: Parameterizing module clk_50
+Progress: Adding clock_bridge_sys [altera_clock_bridge 18.1]
+Progress: Parameterizing module clock_bridge_sys
+Progress: Adding modular_adc_0 [altera_modular_adc 18.1]
+Progress: Parameterizing module modular_adc_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Warning: lab62soc.altpll_sys: altpll_sys.areset_conduit must be exported, or connected to a matching conduit.
+Warning: lab62soc.altpll_sys: altpll_sys.pll_slave must be connected to an Avalon-MM master
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /home/ece385user/Downloads/finalprojjoystick/lab62soc.qsys --synthesis=VERILOG --output-directory=/home/ece385user/Downloads/finalprojjoystick/lab62soc/synthesis --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading finalprojjoystick/lab62soc.qsys
+Progress: Reading input file
+Progress: Adding altpll_sys [altpll 18.1]
+Progress: Parameterizing module altpll_sys
+Progress: Adding clk_50 [clock_source 18.1]
+Progress: Parameterizing module clk_50
+Progress: Adding clock_bridge_sys [altera_clock_bridge 18.1]
+Progress: Parameterizing module clock_bridge_sys
+Progress: Adding modular_adc_0 [altera_modular_adc 18.1]
+Progress: Parameterizing module modular_adc_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Warning: lab62soc.altpll_sys: altpll_sys.areset_conduit must be exported, or connected to a matching conduit.
+Warning: lab62soc.altpll_sys: altpll_sys.pll_slave must be connected to an Avalon-MM master
+Info: lab62soc: Generating lab62soc "lab62soc" for QUARTUS_SYNTH
+Info: altpll_sys: "lab62soc" instantiated altpll "altpll_sys"
+Info: modular_adc_0: "lab62soc" instantiated altera_modular_adc "modular_adc_0"
+Info: rst_controller: "lab62soc" instantiated altera_reset_controller "rst_controller"
+Info: control_internal: "modular_adc_0" instantiated altera_modular_adc_control "control_internal"
+Info: lab62soc: Done "lab62soc" with 5 modules, 13 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
