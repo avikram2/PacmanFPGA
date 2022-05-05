@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------
 
 
-module  pacman ( input Reset, frame_clk, isDefeated, death, reversal,
+module  pacman ( input Reset, frame_clk, isDefeated, victory, death, reversal,
 					input [7:0] keycode,
                output [9:0]  BallX, BallY, output logic [1:0] last_keypress, output logic hasMoved);
     
@@ -45,7 +45,7 @@ module  pacman ( input Reset, frame_clk, isDefeated, death, reversal,
 				hasMoved <= 0;
         end
 
-		else if (death == 1)
+		else if (death == 1 || victory == 1)
 
 		begin
 			Ball_X_Motion <= 0;
