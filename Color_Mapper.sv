@@ -14,7 +14,7 @@
 
 
 module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
-                       input Clk, input isDefeated, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input [10:0] score, input [1:0] lives, input [41:0][41:0] dots, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
+                       input Clk, input isDefeated, victory, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input [10:0] score, input [1:0] lives, input [41:0][41:0] dots, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
     logic pacman_on, ghost_red_on, ghost_green_on, wall_on, ghost_aqua_on;
@@ -88,7 +88,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 
                 end
 
-			if (death == 0)
+			if (death == 0 && victory == 0)
 			begin
 
                 if (DrawX >= 456 && DrawX < 520 && DrawY >= 96 && DrawY < 112)
@@ -335,7 +335,7 @@ end
 
 		end
 		
-		else
+		else if (death == 1)
 		begin
 		if (DrawY >= 240 && DrawY < 256 && DrawX >= 296 && DrawX < 368)
 		begin
@@ -369,6 +369,38 @@ end
 		
 		end
 
+
+        else if (victory == 1)
+        begin
+            if (DrawY >= 240 && DrawY < 256 && DrawX >= 296 && DrawX < 368)
+		begin
+		
+		case(((DrawX - 296) >> 3))
+		    0: game_over_addr = (8'h76 *16 + DrawY -240); //V
+			 1: game_over_addr = (8'h69 * 16 + DrawY - 240); //i
+			 2: game_over_addr = (8'h63 * 16 + DrawY - 240); //c
+			 3: game_over_addr = (8'h74 * 16 + DrawY - 240); //t
+			 4: game_over_addr = (8'h6f * 16 + DrawY - 240); //o
+			 5: game_over_addr = (8'h72 * 16 + DrawY - 240); //r
+			 6: game_over_addr = (8'h79 * 16 + DrawY - 240); //y
+			 7: game_over_addr = (8'h02 * 16 + DrawY - 240); //
+			 8: game_over_addr = (8'h03 * 16 + DrawY - 240); //
+		
+		
+		endcase
+		
+		if (game_over_data[7-((DrawX - 296)%8)] == 1)
+		
+		begin
+	        Red = 8'hff;
+			Blue = 8'h0;
+			Green = 8'hff; 
+			end
+			
+
+
+        end
+    end 
     end 
     
 	 

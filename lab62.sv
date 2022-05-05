@@ -330,6 +330,19 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 		end
 
 	 end
+
+
+
+
+	 logic victory;
+
+
+	 always_comb begin
+		 victory = 0;
+		if ((dots == '0 || score >= 150) && (death == 0)) //score 150 to win
+			victory = 1;
+
+	 end 
 //DrawY = 42 blocks, from 56 to Draw X = 392
 //DrawX = 42, from 56 to 392
 	//  always_comb
@@ -375,7 +388,7 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 
 	pacman pacman_sprite(.Reset(Reset_h), .frame_clk(VGA_VS), .keycode(keycode), .BallX(ballxsig), .BallY(ballysig), .last_keypress, .reversal, .isDefeated, .hasMoved, .death);
 	
-	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .lives, .closePacman, .first_on, .dots, .reversal, .second_on, .third_on, .score, .green_enable, .red_enable, .aqua_enable, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue);
+	color_mapper cm(.Clk(MAX10_CLK1_50), .pacmanX(ballxsig), .pacmanY(ballysig), .DrawX(drawxsig), .DrawY(drawysig), .isDefeated, .death, .lives, .closePacman, .first_on, .dots, .reversal, .second_on, .third_on, .score, .green_enable, .red_enable, .aqua_enable, .fruit_location, .ghost_redX, .ghost_redY, .ghost_greenX, .ghost_greenY, .ghost_aquaX, .ghost_aquaY, .last_keypress, .Red, .Green, .Blue, .victory);
 
 	pacman_counter pc (.frame_clk(VGA_VS), .Reset(Reset_h), .hasMoved, .closePacman);
 

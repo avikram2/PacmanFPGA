@@ -45,10 +45,10 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, reversal, death,
         case(min_direction)
 
             0: begin
-                if (((distance_up - min_distance) <= (distance_down - min_distance)) && up_stop_motion == 0)
+                if (((distance_up - min_distance)*(distance_up - min_distance) <= (distance_down - min_distance)*(distance_down - min_distance)) && up_stop_motion == 0)
                 direction = 3;
 
-                else if (((distance_down - min_distance) <= (distance_up - min_distance)) && down_stop_motion == 0)
+                else if (((distance_down - min_distance)*(distance_down - min_distance) <= (distance_up - min_distance)*(distance_up - min_distance)) && down_stop_motion == 0)
                 direction = 1;
 
                 else if (left_stop_motion == 0)
@@ -56,10 +56,10 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, reversal, death,
             end
 
             1: begin
-                if (((distance_right - min_distance) <= (distance_left - min_distance)) && right_stop_motion == 0)
+                if (((distance_right - min_distance)*(distance_right - min_distance) <= (distance_left - min_distance)*(distance_left - min_distance)) && right_stop_motion == 0)
                 direction = 0;
 
-                else if (((distance_left - min_distance) <= (distance_right - min_distance)) && left_stop_motion == 0)
+                else if (((distance_left - min_distance)*(distance_left - min_distance) <= (distance_right - min_distance)*(distance_right - min_distance)) && left_stop_motion == 0)
                 direction = 2;
 
                 else if (up_stop_motion == 0)
@@ -68,10 +68,10 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, reversal, death,
 
 
             2: begin
-                if (((distance_up - min_distance) <= (distance_down - min_distance)) && up_stop_motion == 0)
+                if (((distance_up - min_distance)*(distance_up - min_distance) <= (distance_down - min_distance)*(distance_down - min_distance)) && up_stop_motion == 0)
                 direction = 3;
 
-                else if (((distance_down - min_distance) <= (distance_up - min_distance)) && down_stop_motion == 0)
+                else if (((distance_down - min_distance)*(distance_down - min_distance) <= (distance_up - min_distance)*(distance_up - min_distance)) && down_stop_motion == 0)
                 direction = 1;
 
                 else if (right_stop_motion == 0)
@@ -81,10 +81,10 @@ module ghost_red (input Reset, frame_clk, hasMoved, isDefeated, reversal, death,
 
 
                 3: begin
-                    if (((distance_right - min_distance) <= (distance_left - min_distance)) && right_stop_motion == 0)
+                    if (((distance_right - min_distance)*(distance_right - min_distance) <= (distance_left - min_distance)*(distance_left - min_distance)) && right_stop_motion == 0)
                     direction = 0;
-    
-                    else if (((distance_left - min_distance) <= (distance_right - min_distance)) && left_stop_motion == 0)
+
+                    else if (((distance_left - min_distance)*(distance_left - min_distance) <= (distance_right - min_distance)*(distance_right - min_distance)) && left_stop_motion == 0)
                     direction = 2;
     
                     else if (down_stop_motion == 0)
@@ -260,10 +260,10 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, reversal
         case(min_direction)
 
             0: begin
-                if (((distance_up - min_distance) <= (distance_down - min_distance)) && up_stop_motion == 0)
+                if (((distance_up - min_distance)*(distance_up - min_distance) <= (distance_down - min_distance)*(distance_down - min_distance)) && up_stop_motion == 0)
                 direction = 3;
 
-                else if (((distance_down - min_distance) <= (distance_up - min_distance)) && down_stop_motion == 0)
+                else if (((distance_down - min_distance)*(distance_down - min_distance) <= (distance_up - min_distance)*(distance_up - min_distance)) && down_stop_motion == 0)
                 direction = 1;
 
                 else if (left_stop_motion == 0)
@@ -271,10 +271,10 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, reversal
             end
 
             1: begin
-                if (((distance_right - min_distance) <= (distance_left - min_distance)) && right_stop_motion == 0)
+                if (((distance_right - min_distance)*(distance_right - min_distance) <= (distance_left - min_distance)*(distance_left - min_distance)) && right_stop_motion == 0)
                 direction = 0;
 
-                else if (((distance_left - min_distance) <= (distance_right - min_distance)) && left_stop_motion == 0)
+                else if (((distance_left - min_distance)*(distance_left - min_distance) <= (distance_right - min_distance)*(distance_right - min_distance)) && left_stop_motion == 0)
                 direction = 2;
 
                 else if (up_stop_motion == 0)
@@ -283,10 +283,10 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, reversal
 
 
             2: begin
-                if (((distance_up - min_distance) <= (distance_down - min_distance)) && up_stop_motion == 0)
+                if (((distance_up - min_distance)*(distance_up - min_distance) <= (distance_down - min_distance)*(distance_down - min_distance)) && up_stop_motion == 0)
                 direction = 3;
 
-                else if (((distance_down - min_distance) <= (distance_up - min_distance)) && down_stop_motion == 0)
+                else if (((distance_down - min_distance)*(distance_down - min_distance) <= (distance_up - min_distance)*(distance_up - min_distance)) && down_stop_motion == 0)
                 direction = 1;
 
                 else if (right_stop_motion == 0)
@@ -296,10 +296,10 @@ module ghost_green(input Reset, frame_clk, hasMoved, isDefeated, death, reversal
 
 
                 3: begin
-                    if (((distance_right - min_distance) <= (distance_left - min_distance)) && right_stop_motion == 0)
+                    if (((distance_right - min_distance)*(distance_right - min_distance) <= (distance_left - min_distance)*(distance_left - min_distance)) && right_stop_motion == 0)
                     direction = 0;
-    
-                    else if (((distance_left - min_distance) <= (distance_right - min_distance)) && left_stop_motion == 0)
+
+                    else if (((distance_left - min_distance)*(distance_left - min_distance) <= (distance_right - min_distance)*(distance_right - min_distance)) && left_stop_motion == 0)
                     direction = 2;
     
                     else if (down_stop_motion == 0)
@@ -474,10 +474,10 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, reversal
         case(min_direction)
 
             0: begin
-                if (((distance_up - min_distance) <= (distance_down - min_distance)) && up_stop_motion == 0)
+                if (((distance_up - min_distance)*(distance_up - min_distance) <= (distance_down - min_distance)*(distance_down - min_distance)) && up_stop_motion == 0)
                 direction = 3;
 
-                else if (((distance_down - min_distance) <= (distance_up - min_distance)) && down_stop_motion == 0)
+                else if (((distance_down - min_distance)*(distance_down - min_distance) <= (distance_up - min_distance)*(distance_up - min_distance)) && down_stop_motion == 0)
                 direction = 1;
 
                 else if (left_stop_motion == 0)
@@ -485,10 +485,10 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, reversal
             end
 
             1: begin
-                if (((distance_right - min_distance) <= (distance_left - min_distance)) && right_stop_motion == 0)
+                if (((distance_right - min_distance)*(distance_right - min_distance) <= (distance_left - min_distance)*(distance_left - min_distance)) && right_stop_motion == 0)
                 direction = 0;
 
-                else if (((distance_left - min_distance) <= (distance_right - min_distance)) && left_stop_motion == 0)
+                else if (((distance_left - min_distance)*(distance_left - min_distance) <= (distance_right - min_distance)*(distance_right - min_distance)) && left_stop_motion == 0)
                 direction = 2;
 
                 else if (up_stop_motion == 0)
@@ -497,10 +497,10 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, reversal
 
 
             2: begin
-                if (((distance_up - min_distance) <= (distance_down - min_distance)) && up_stop_motion == 0)
+                if (((distance_up - min_distance)*(distance_up - min_distance) <= (distance_down - min_distance)*(distance_down - min_distance)) && up_stop_motion == 0)
                 direction = 3;
 
-                else if (((distance_down - min_distance) <= (distance_up - min_distance)) && down_stop_motion == 0)
+                else if (((distance_down - min_distance)*(distance_down - min_distance) <= (distance_up - min_distance)*(distance_up - min_distance)) && down_stop_motion == 0)
                 direction = 1;
 
                 else if (right_stop_motion == 0)
@@ -510,10 +510,10 @@ module ghost_aqua (input Reset, frame_clk, hasMoved, isDefeated, death, reversal
 
 
                 3: begin
-                    if (((distance_right - min_distance) <= (distance_left - min_distance)) && right_stop_motion == 0)
+                    if (((distance_right - min_distance)*(distance_right - min_distance) <= (distance_left - min_distance)*(distance_left - min_distance)) && right_stop_motion == 0)
                     direction = 0;
-    
-                    else if (((distance_left - min_distance) <= (distance_right - min_distance)) && left_stop_motion == 0)
+
+                    else if (((distance_left - min_distance)*(distance_left - min_distance) <= (distance_right - min_distance)*(distance_right - min_distance)) && left_stop_motion == 0)
                     direction = 2;
     
                     else if (down_stop_motion == 0)
