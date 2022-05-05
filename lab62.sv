@@ -151,13 +151,13 @@ logic Reset_h, vssig, blank, sync, VGA_Clk;
 			command_channel <= 5'b00000;
 		end
 
-		else if (command_channel == 2 && command_ready == 1)
+		else if (command_channel == 2)
 		begin
 			command_channel <= 5'b00001;
 
 		end
 
-		else if (command_ready == 1)
+		else
 		begin
 			command_channel <= (command_channel + 1);
 		end 
