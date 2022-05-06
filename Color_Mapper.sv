@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------
 
 
-module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY,
+module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_redX, ghost_redY,ghost_greenX, ghost_greenY, ghost_aquaX, ghost_aquaY, input [9:0] reversal_counter,
                        input Clk, input isDefeated, victory, death, closePacman, reversal, red_enable, green_enable, aqua_enable, input [10:0] score, input [1:0] lives, input [41:0][41:0] dots, input first_on, second_on, third_on, input [9:0] fruit_location [6], input logic [1:0] last_keypress,
                        output logic [7:0]  Red, Green, Blue );
     
@@ -31,8 +31,8 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
      this single line is quite powerful descriptively, it causes the synthesis tool to use up three
      of the 12 available multipliers on the chip!  Since the multiplicants are required to be signed,
 	  we have to first cast them from logic to int (signed by default) before they are multiplied). */
-	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data, dot_data, lives_data, score_data;
-    logic [10:0] game_over_addr, lives_addr, score_addr;
+	 logic [7:0] RGB_data, RGB_data_right, RGB_data_top, RGB_data_bottom, ghost_red_data, ghost_green_data, ghost_aqua_data, game_over_data, pac_data_closed, fruit1_data, fruit2_data, fruit3_data, dot_data, lives_data, score_data, time_data;
+    logic [10:0] game_over_addr, lives_addr, score_addr, time_addr;
 	 int DistX, DistY;
 
 
@@ -64,6 +64,7 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 		  game_over_addr = 0;
           lives_addr = 0;
           score_addr = 0;
+          time_addr = 0; 
 
           if (DrawX >= 456 && DrawX < 512 && DrawY >= 120 && DrawY < 136)
                 begin
@@ -90,6 +91,32 @@ module  color_mapper ( input        [9:0] pacmanX, pacmanY, DrawX, DrawY, ghost_
 
 			if (death == 0 && victory == 0)
 			begin
+
+                if (reversal == 1 && (red_enable == 1 || green_enable == 1 || aqua_enable == 1))
+                begin
+                    if (DrawX >= 456 && DrawX < 472 && DrawY >= 144 && DrawY < 160)
+                    begin
+                        unique case(((DrawX - 456) >> 3))
+                            0: time_addr =  (8'h3a * 16 + DrawY - 144); //:
+                            1: time_addr = (((9-(reversal_counter/60)) + 8'h30)*16 + DrawY - 144);
+
+
+                        endcase
+
+
+                        if (time_data[7-((DrawX - 456)%8)] == 1)
+                        begin
+                            Red = 8'hff;
+			                Blue = 8'hff;
+			                Green = 8'hff; 
+                        end
+
+                    end
+
+
+
+
+                end
 
                 if (DrawX >= 456 && DrawX < 520 && DrawY >= 96 && DrawY < 112)
                 begin
@@ -426,6 +453,7 @@ end
 
      font_rom score_rom (.addr(score_addr), .data(score_data));
 
+     font_rom time_rom (.addr(time_addr), .data(time_data));
 
      fruit f1 (.addr(DrawY - fruit_location[1]), .data(fruit1_data));
 
